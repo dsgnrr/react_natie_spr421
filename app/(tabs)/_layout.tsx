@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import {Ionicons} from '@expo/vector-icons'
+import Feather from '@expo/vector-icons/Feather';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 const TabLayout = () =>{
@@ -17,6 +18,12 @@ const TabLayout = () =>{
             options={{
                 title:'About', 
                 tabBarIcon:({color})=> <EvilIcons name="question" size={24} color={color}/>}}
+            />
+            <Tabs.Screen name="lists"
+            options={{
+                title: 'Lists',
+                tabBarIcon:({color})=> <Feather name="list" size={24} color={color} />
+            }}
             />
         </Tabs>
     )

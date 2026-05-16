@@ -1,34 +1,83 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { useRef, useEffect } from "react";
+import { View, Text, FlatList, StyleSheet, Animated, Image } from "react-native";
 
-interface Item { 
-    id:string,
+interface Item {
+    id: string,
     title: string
 }
 
 const AboutTab = () => {
-    // const data = [
-    //     { id: '1', title: 'item1' },
-    //     { id: '2', title: 'item2' },
-    //     { id: '3', title: 'item3' },
-    //     { id: '4', title: 'item4' },
-    //     { id: '5', title: 'item5' },
-    //     { id: '6', title: 'item6' },
-    // ];
-    const data = [] as Item[]
+    const data: Item[] = [
+        { id: '1', title: 'item1' },
+        { id: '2', title: 'item2' },
+        { id: '3', title: 'item3' },
+        { id: '4', title: 'item4' },
+        { id: '5', title: 'item5' },
+        { id: '6', title: 'item6' },
+        { id: '7', title: 'item6' },
+        { id: '8', title: 'item6' },
+        { id: '9', title: 'item6' },
+        { id: '10', title: 'item6' },
+        { id: '11', title: 'item6' },
+        { id: '12', title: 'item6' },
+        { id: '13', title: 'item6' },
+        { id: '14', title: 'item6' },
+        { id: '15', title: 'item6' },
+        { id: '16', title: 'item6' },
+        { id: '17', title: 'item6' },
+        { id: '18', title: 'item6' },
+        { id: '19', title: 'item6' },
+        { id: '20', title: 'item6' },
+        { id: '21', title: 'item6' },
+        { id: '22', title: 'item6' },
+        { id: '23', title: 'item6' },
+        { id: '24', title: 'item6' },
+        { id: '25', title: 'item6' },
+        { id: '26', title: 'item6' },
+        { id: '27', title: 'item6' },
+        { id: '28', title: 'item6' },
+        { id: '29', title: 'item6' },
+    ];
+    // const data = [] as Item[]
+    const fadeAnim = useRef(data.map(() => new Animated.Value(0))).current;
+
+    useEffect(() => {
+        data.forEach((_, i) => {
+            Animated.timing(fadeAnim[i], {
+                toValue: 1,
+                duration: 500,
+                delay: 200,
+                useNativeDriver: true
+            }).start()
+        })
+    }, [])
+
+    const renderItem = ({ item, index }: { item: Item, index: number }) => (
+        <Animated.View style={[styles.listItem, { opacity: fadeAnim[index] }]}>
+            <Text style={styles.listItemText}>{item.title}</Text>
+        </Animated.View>
+    )
+
+
     return (
         <View style={styles.container}>
+            <View style={styles.imageContainer}>
+                    <Image style={styles.image} source={require("../../assets/firefox.jpg")}></Image>
+                </View>
             <View style={styles.card}>
+                
                 <FlatList
                     data={data}
                     keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
+                    /*renderItem={({ item }) => (
                         <View style={styles.listItem}>
                             <Text style={styles.listItemText}>{item.title}</Text>
                         </View>
-                    )}
+                    )}*/
+                    renderItem={renderItem}
                     ListEmptyComponent={
                         <Text style={{
-                            textAlign:'center',
+                            textAlign: 'center',
                             marginTop: 50,
                             color: '#8e8e93',
                             fontSize: 16
@@ -36,14 +85,30 @@ const AboutTab = () => {
                     }
                 />
             </View>
+
         </View>
     )
 
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20, gap: 15 },
+    container: { flex: 2, padding: 20, gap: 15 },
+    imageContainer: {
+        flex: 2,
+        borderColor: "darkgray",
+        borderWidth: 2,
+        position: "relative",
+        borderRadius: 15,
+        overflow: 'hidden'
+    },
+    image: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+        resizeMode: "cover"
+    },
     card: {
+        flex: 1,
         backgroundColor: '#fff',
         padding: 20,
         borderRadius: 15,
@@ -90,7 +155,7 @@ const styles = StyleSheet.create({
         borderLeftColor: '#007aff',
         marginVertical: 8
     },
-    listItemText: {fontSize: 16},
+    listItemText: { fontSize: 16 },
 
 })
 
