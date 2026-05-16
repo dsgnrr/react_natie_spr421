@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import {Ionicons} from '@expo/vector-icons'
 import Feather from '@expo/vector-icons/Feather';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 
 const TabLayout = () =>{
     return(
@@ -23,6 +24,12 @@ const TabLayout = () =>{
             options={{
                 title: 'Lists',
                 tabBarIcon:({color})=> <Feather name="list" size={24} color={color} />
+            }}
+            />
+            <Tabs.Screen name="dimension"
+            options={{
+                title: 'Dimensions',
+                tabBarIcon:({color})=> <SimpleLineIcons name="screen-smartphone" size={24} color={color} />
             }}
             />
         </Tabs>

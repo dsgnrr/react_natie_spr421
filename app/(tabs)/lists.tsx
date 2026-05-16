@@ -1,6 +1,7 @@
-import { View, SectionList, StyleSheet, Text } from "react-native"
+import { View, SectionList,Dimensions, StyleSheet, Text, useWindowDimensions } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { StatusBar } from "react-native"
+import { useEffect, useState } from "react"
 
 interface Item {
     title: string,
@@ -8,6 +9,18 @@ interface Item {
 }
 
 const ListsTab = () => {
+    // const window = Dimensions.get("window");
+    // console.log(window)
+    const [windowData, setWindowData] = useState(Dimensions.get('window'));
+
+    useEffect(()=>{
+        const subscription = Dimensions.addEventListener('change',({window, screen})=>{
+            setWindowData(window)
+            console.log('Orientation changed: ', window)
+        })
+    },[])
+
+    const dimension = useWindowDimensions();
     const insets = useSafeAreaInsets();
     const data: Item[] = [
         {
@@ -25,7 +38,7 @@ const ListsTab = () => {
     ]
     return (
         <View style={[styles.container,{paddingTop: insets.top, paddingBottom: insets.bottom}]}>
-            <StatusBar barStyle="default" backgroundColor="#138539" translucent={false}/>
+            <StatusBar barStyle="dark-content" backgroundColor="#138539" translucent={true}/>
             <View style={styles.card}>
                 <SectionList
                     sections={data}
