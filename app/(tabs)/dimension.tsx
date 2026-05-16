@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import * as Notifications from "expo-notifications";
 import* as Contacts from "expo-contacts";
 
+
 const dimensionTab = () => {
 
     console.log("Platform version: ", Platform.Version)
@@ -16,6 +17,9 @@ const dimensionTab = () => {
     const getContact = async () => {
         const {status} = await Contacts.requestPermissionsAsync();
         if(status === 'granted'){
+            const contactData = {
+                [Contacts.Fields.FirstName]: 'Contact2'
+            }
             const {data} = await Contacts.getContactsAsync({
                 fields: [Contacts.Fields.PhoneNumbers, Contacts.Fields.Name]
             })
