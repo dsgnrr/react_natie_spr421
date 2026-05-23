@@ -1,9 +1,7 @@
 import { Tabs } from "expo-router";
 import {Ionicons} from '@expo/vector-icons'
-import Feather from '@expo/vector-icons/Feather';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const TabLayout = () =>{
     return(
@@ -20,6 +18,11 @@ const TabLayout = () =>{
             options={{
                 title:'Database', 
                 tabBarIcon:({color})=> <Entypo name="database" size={24} color={color} />}}
+            />
+            <Tabs.Screen name="rest" 
+            options={{
+                title:'RestAPI', 
+                tabBarIcon:({color})=> <AntDesign name="api" size={24} color={color} />}}
             />
         </Tabs>
     )

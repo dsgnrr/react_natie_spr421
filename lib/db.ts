@@ -4,9 +4,9 @@ import * as Crypto from 'expo-crypto';
 export interface Product{
     id?:string;
     title: string;
-    description: string
+    description?: string|null
     price: number
-    created_at: number
+    created_at?: number
     deleted_at?: number
 }
 
@@ -26,12 +26,13 @@ class DatabaseManager{
                 deleted_at INTEGER DEFAULT NULL
             );
             `)
+            console.log("DB created succesfully");
     }
     async addProduct(product:Product){
         if(!this.db) throw new Error("DB is not initialized");
         const result = await this.db.runAsync(
-            `INSERT INTO products (id, title, price, description, created_at) VALUES(?, ?, ?, ?, ?)`,[
-                Crypto.randomUUID(), product.title, product.price, product.description, Date.now()
+            `INSERT INTO products (id, title, price, description, created_at) VALUES(?, ?, ?, ?, ?);`,[
+                Crypto.randomUUID(), product.title, product.price, product.description? product.description: null, Date.now()
             ]
         );
 
@@ -39,12 +40,12 @@ class DatabaseManager{
     }
     async getAllProducts(): Promise<Product[]>{
         if(!this.db) throw new Error("DB is not initialized");
-        const rows = this.db.getAllAsync<Product>('SELECT * FROM products ORDER BY title');
+        const rows = this.db.getAllAsync<Product>('SELECT * FROM products WHERE deleted_at IS NULL ORDER BY title;');
         return rows;
     }
     async deleteProduct(id: string){
         if(!this.db) throw new Error("DB is not initialized");
-        await this.db.runAsync('UPDATE products SET deleted_at = ? WHERE id = ?', [
+        await this.db.runAsync('UPDATE products SET deleted_at = ? WHERE id = ?;', [
             Date.now(), id
         ]);
     }

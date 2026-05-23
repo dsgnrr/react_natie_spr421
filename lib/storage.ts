@@ -2,4 +2,4 @@ import { createMMKV, MMKV } from "react-native-mmkv";
 
 const storage = createMMKV();
 
-export {storage};
+// export {storage};

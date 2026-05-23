@@ -7,13 +7,13 @@ import {
     TouchableOpacity 
 } from 'react-native';
 // import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MMKV, useMMKVString } from 'react-native-mmkv';
-import {storage} from '@/lib/storage';
+// import { MMKV, useMMKVString } from 'react-native-mmkv';
+// import {storage} from '@/lib/storage';
 
 
 const HomeScreen = ()=>{
     const [name, setName] = useState("");
-    const [savedName, setSavedName] = useMMKVString('username', storage)
+    // const [savedName, setSavedName] = useMMKVString('username', storage)
 
     useEffect(()=>{
         loadName()
@@ -29,8 +29,8 @@ const HomeScreen = ()=>{
     // }
     const saveName = () => {
         try {
-            storage.set("username", name)
-            setSavedName(name)
+            // storage.set("username", name)
+            // setSavedName(name)
             setName("")
         } catch (error) {
             console.error("Save error: ", error)
@@ -39,8 +39,8 @@ const HomeScreen = ()=>{
 
     const loadName = async () => {
         try {
-            const storedValue =  storage.getString("username")
-            if(storedValue) setSavedName(storedValue)
+            // const storedValue =  storage.getString("username")
+            // if(storedValue) setSavedName(storedValue)
         } catch (error) {
             console.error("Load error: ", error)
         }
@@ -58,8 +58,9 @@ const HomeScreen = ()=>{
     return(
         <View style={styles.container}>
             <View style={styles.card}>
-                <Text style={styles.title}>Welcome {savedName?"":", "+savedName+" "}to our APP</Text>
-                <Text style={styles.desc}>{savedName}</Text>
+                {/* <Text style={styles.title}>Welcome {savedName?"":", "+savedName+" "}to our APP</Text> */}
+                <Text style={styles.title}>Welcome to our APP</Text>
+                {/* <Text style={styles.desc}>{savedName}</Text> */}
             </View>
             <View style={styles.card}>
                 <TextInput

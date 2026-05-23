@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+    ActivityIndicator,
     View,
     Text,
     StyleSheet,
@@ -7,52 +8,52 @@ import {
     TouchableOpacity,
     FlatList
 } from 'react-native';
-import { dbManager, Product } from '@/lib/db';
 
+import { fakeApi } from '@/lib/fake-api';
 
+interface Post {
+    userId: number;
+    id: number;
+    title: string;
+    body: string;
+}
 
-const DatabaseScreen = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+const RestScreen = () => {
+    const [post, setPost] = useState<Post>();
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(false);
+    
 
-    useEffect(() => {
-        const setup = async () => {
-            await dbManager.init()
-            await loadProducts()
-        }
-        setup();
-    }, []);
-
-    const loadProducts = async () => {
-        setLoading(true)
-        const list = await dbManager.getAllProducts();
-        setProducts(list)
-        setLoading(false)
+    const getPostsHandle = async () => {
+        setLoading(true);
+        const res = await fakeApi.get('/posts');
+        console.log("Status: ", res.status);
+        setPosts(res.data);
+        setLoading(false);
+        // fetch('https://jsonplaceholder.typicode.com/posts')
+        //     .then((response) => response.json())
+        //     .then(setPosts)
+        //     .catch(console.error)
+        //     .finally(()=>{
+        //         setLoading(false);
+        //     })
     }
-    const addProductHandle = async () => {
-        await dbManager.addProduct({
-            title: `Product-${Math.floor(Math.random() * 100)}`,
-            price: Math.floor(Math.random() * 1000)
-        })
-        await loadProducts()
-    }
-
-    if (loading) return <Text>Loading...</Text>
-
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={addProductHandle} style={styles.button}>
-                <Text style={styles.buttonText}>Add new product</Text>
+            <TouchableOpacity onPress={getPostsHandle} style={styles.button}>
+                <Text style={styles.buttonText}>Get posts</Text>
             </TouchableOpacity>
             <View style={styles.card}>
+                {loading? <ActivityIndicator/>:(
                 <FlatList
-                    data={products}
-                    keyExtractor={(item) => item.id!.toString()}
+                    data={posts}
+                    keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.listItem}>
-                            <Text style={styles.listItemId}>{item.id}</Text>
-                            <Text style={styles.listItemText}>{item.title}</Text>
-                            <Text style={styles.listItemPrice}>{item.price}</Text>
+                            <Text style={styles.listItemId}>Id: {item.userId}</Text>
+                            <Text style={styles.listItemUserId}>User: {item.id}</Text>
+                            <Text style={styles.listItemTitle}>{item.title}</Text>
+                            <Text style={styles.listItemBody}>{item.body}</Text>
                         </View>
                     )}
                     ListEmptyComponent={
@@ -64,6 +65,7 @@ const DatabaseScreen = () => {
                         }}>List is empty</Text>
                     }
                 />
+                )}
             </View>
         </View>
     )
@@ -107,7 +109,8 @@ const styles = StyleSheet.create({
         marginVertical: 8
     },
     listItemId: { fontSize: 11 },
-    listItemText: { fontSize: 20, fontWeight: "bold" },
-    listItemPrice: { fontSize: 17, fontWeight: "bold", color: "#0a6819" },
+    listItemUserId: { fontSize: 11, fontWeight: "bold" },
+    listItemTitle: { fontSize: 18, fontWeight: "bold" },
+    listItemBody: { fontSize: 16, color: "#222222" },
 })
-export default DatabaseScreen;
+export default RestScreen;
