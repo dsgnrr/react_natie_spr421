@@ -1,102 +1,84 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View, 
     Text, 
-    Switch, 
-    StyleSheet, 
-    ToastAndroid,
-    TouchableOpacity, 
-    Alert,
-    Button,
+    StyleSheet,
     TextInput,
-    FlatList,
+    TouchableOpacity 
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MMKV, useMMKVString } from 'react-native-mmkv';
+import {storage} from '@/lib/storage';
+
 
 const HomeScreen = ()=>{
+    const [name, setName] = useState("");
+    const [savedName, setSavedName] = useMMKVString('username', storage)
 
-    /* TODO:
-    Створіть список задач. Користувач може додавати завдання через textinput.
-    Рендерити усі задачі у списку, до кожної задачі додати кнопку видалення, яка має працювати.
-    Додати перевріку на пустий текст, якщо вводиться пустий текст, і користувач натискає кнопку "Додати",
-    вивести помилку в Alert.
-    Після додавання задачі, вивести Toast, що задача додана успішно
-
-    У домашніх завданнях, прикріпити посилання на репозиторій з виконаним домашнім завданням, код+скріншоти
-    Скріншоти додати у Readme-файл гітхаб
-    */
-
-    const [isEnabled, setIsEnabled] = useState(false)
-    const [text, setText] = useState('')
-
-   
-    
-    const pressButton = ()=>{
-        Alert.alert("Thanks for Subscribe", 'Waiting GooglePay services', [
-            {
-                text:'Ok',
-                onPress:()=>console.log('Ok Pressed'),
-                style: 'cancel'
-            }
-        ] )
+    useEffect(()=>{
+        loadName()
+    }, [])
+    // const saveNameAsync = async () => {
+    //     try {
+    //         await AsyncStorage.setItem("username", name)
+    //         setSavedName(name)
+    //         setName("")
+    //     } catch (error) {
+    //         console.error("Save error: ", error)
+    //     }
+    // }
+    const saveName = () => {
+        try {
+            storage.set("username", name)
+            setSavedName(name)
+            setName("")
+        } catch (error) {
+            console.error("Save error: ", error)
+        }
     }
-    const showToast = ()=>{
-        ToastAndroid.show("Toast!", ToastAndroid.LONG)
+
+    const loadName = async () => {
+        try {
+            const storedValue =  storage.getString("username")
+            if(storedValue) setSavedName(storedValue)
+        } catch (error) {
+            console.error("Load error: ", error)
+        }
     }
+
+    // const loadNameAsync = async () => {
+    //     try {
+    //         const storedValue = await AsyncStorage.getItem("username")
+    //         if(storedValue) setSavedName(storedValue)
+    //     } catch (error) {
+    //         console.error("Load error: ", error)
+    //     }
+    // }
 
     return(
         <View style={styles.container}>
             <View style={styles.card}>
-                <Text style={styles.title}>Welcome to our APP</Text>
-                <Text style={styles.desc}>cool app</Text>
-            </View>
-            <TouchableOpacity onPress={pressButton} style={styles.button}>
-                <Text style={styles.buttonText}>Subscribe $2.99/Month</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={showToast} style={[styles.button ,{ backgroundColor: '#1b9c2c'}]}>
-                <Text style={styles.buttonText}>Show Toast</Text>
-            </TouchableOpacity>
-
-            <Button title='Default button' color={'#0f836a'}/>
-
-            <View style={styles.switch}>
-                <Text style={{fontSize: 18}}>Notifications</Text>
-                <Switch 
-                trackColor={{'false':'#767577', true:'#81b0ff'}}
-                thumbColor={isEnabled ? '#007aff' : '#f4f3f4'}
-                onValueChange={() => setIsEnabled(!isEnabled)}
-                value={isEnabled}
-                />
+                <Text style={styles.title}>Welcome {savedName?"":", "+savedName+" "}to our APP</Text>
+                <Text style={styles.desc}>{savedName}</Text>
             </View>
             <View style={styles.card}>
                 <TextInput
-                    style={styles.input} 
-                    placeholder='Type something'
-                    onChangeText={setText}
-                    value={text}
-                    placeholderTextColor="#999"
-                />
-                <Text style={{color:'gray', fontSize: 18}}>&gt; {text}</Text>
+                    style={styles.input}
+                    value={name}
+                    onChangeText={setName}
+                    placeholder='Enter name'
+                    placeholderTextColor='#999'
+                ></TextInput>
+                <TouchableOpacity
+                onPress={saveName}
+                style={styles.button}
+                >
+                    <Text style={styles.buttonText}>Save Name</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
 }
-
-/* Flex:
-flex: 1
-flexDirection: 'column'/'row'
-justifyContent: 'center'/'space-between'/'flex-start'/'flex-end'
-alignItems: center/stretch/flext-start
-gap
-
-Sizes
-width/height: number/percent
-
-margin/padding
-
-marginVertical/marginHorizontal
-
-*/
 
 const styles = StyleSheet.create({
     container:{flex:1, padding: 20, gap:15},
@@ -139,14 +121,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16
     },
-    listItem:{
-        backgroundColor:"#f9f9f9",
-        padding: 20,
-        borderRadius: 10,
-        borderLeftWidth: 5,
-        borderLeftColor: '#007aff'
-    },
-    listItemText:{},
-
 })
 export default HomeScreen;

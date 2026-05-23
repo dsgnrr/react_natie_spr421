@@ -1,7 +1,7 @@
 import { View, SectionList, Dimensions,Alert ,TouchableOpacity, StyleSheet, Text, useWindowDimensions, Platform, ToastAndroid } from "react-native"
 import { useEffect, useState } from "react"
 
-import * as Notifications from "expo-notifications";
+// import * as Notifications from "expo-notifications";
 import* as Contacts from "expo-contacts";
 
 
@@ -30,6 +30,9 @@ const dimensionTab = () => {
             }
         }
     }
+
+    //#region Notifications
+    /*
     const showPushNotify = async () => {
         if (Platform.OS !== 'android') return;
 
@@ -49,7 +52,8 @@ const dimensionTab = () => {
             lightColor: "#3f9dd8ff",
             description: "Notify push"
         })
-    }
+    }*/
+    //#endregion
 
 
     const styles = StyleSheet.create({
@@ -88,9 +92,6 @@ const dimensionTab = () => {
     })
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={showPushNotify} style={styles.button}>
-                <Text style={styles.buttonText}>Notify</Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={getContact} style={styles.button}>
                 <Text style={styles.buttonText}>Get contact</Text>
             </TouchableOpacity>

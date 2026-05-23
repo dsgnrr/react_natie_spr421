@@ -3,7 +3,6 @@ import {Ionicons} from '@expo/vector-icons'
 import Feather from '@expo/vector-icons/Feather';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
-import Entypo from '@expo/vector-icons/Entypo';
 
 const TabLayout = () =>{
     return(
@@ -16,10 +15,22 @@ const TabLayout = () =>{
                 title:'Main Page', 
                 tabBarIcon:({color})=> <Ionicons name="home" size={24} color={color}/>}}
             />
-            <Tabs.Screen name="database" 
+            <Tabs.Screen name="about" 
             options={{
-                title:'Database', 
-                tabBarIcon:({color})=> <Entypo name="database" size={24} color={color} />}}
+                title:'About', 
+                tabBarIcon:({color})=> <EvilIcons name="question" size={24} color={color}/>}}
+            />
+            <Tabs.Screen name="lists"
+            options={{
+                title: 'Lists',
+                tabBarIcon:({color})=> <Feather name="list" size={24} color={color} />
+            }}
+            />
+            <Tabs.Screen name="dimension"
+            options={{
+                title: 'Dimensions',
+                tabBarIcon:({color})=> <SimpleLineIcons name="screen-smartphone" size={24} color={color} />
+            }}
             />
         </Tabs>
     )
